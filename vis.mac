@@ -1,0 +1,15 @@
+#Macro per la visualizzazione della simulazione
+
+/vis/open OGL 800x800-0+0
+/vis/drawVolume
+/vis/viewer/set/viewpointThetaPhi 90. 180.
+#/vis/viewer/zoom 1.4
+/vis/scene/add/trajectories
+
+/vis/modeling/trajectories/create/drawByParticleID
+/vis/modeling/trajectories/drawByParticleID-0/set gamma red
+/vis/modeling/trajectories/drawByParticleID-0/set opticalphoton green
+
+/vis/scene/endOfEventAction accumulate
+
+/run/beamOn 10
