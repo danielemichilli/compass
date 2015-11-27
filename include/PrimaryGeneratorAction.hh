@@ -11,13 +11,15 @@ class G4Event;
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    PrimaryGeneratorAction();
+    PrimaryGeneratorAction(G4double);
     virtual ~PrimaryGeneratorAction();
 
   public:
     void GeneratePrimaries(G4Event* anEvent);
     inline G4ParticleGun* GetParticleGun() {return particleGun;}
-
+    inline G4double GethSource() {return heigth_source;}
+    
   private:
     G4ParticleGun* particleGun;
+    G4double heigth_source;
 };

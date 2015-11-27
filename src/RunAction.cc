@@ -67,7 +67,8 @@ void RunAction::EndOfRunAction(const G4Run*)
          << "Efficienza 1......................." << G4double(num)/evt << G4endl
          << "Efficienza 2......................." << G4double(num2)/evt << G4endl <<
   G4endl << "Numero di bacchette per lato......." << detector_construction->GetSideNb() << G4endl
-         << "Altezza delle bacchette............" << detector_construction->GetHeightOfBacc()/cm << " cm" << G4endl;
+         << "Altezza delle bacchette............" << detector_construction->GetHeightOfBacc()/cm << " cm" << G4endl
+         << "Altezza della sorgente............." << gen_action->GethSource()/cm << " cm" << G4endl;
 
   std::ofstream scorefile;
   scorefile.open("scorefile.dat",std::fstream::app);
@@ -80,8 +81,9 @@ void RunAction::EndOfRunAction(const G4Run*)
             << "Tagging efficiency 1..............." << G4double(num)/evt << G4endl
             << "Tagging efficiency 2..............." << G4double(num2)/evt << G4endl <<
      G4endl << "Numero di bacchette per lato......." << detector_construction->GetSideNb() << G4endl
-            << "Altezza delle bacchette............" << detector_construction->GetHeightOfBacc()/cm << " cm" << G4endl;
-
+            << "Altezza delle bacchette............" << detector_construction->GetHeightOfBacc()/cm << " cm" << G4endl
+            << "Altezza della sorgente............." << gen_action->GethSource()/cm << " cm" << G4endl;
+ 
 
   scorefile.close();
 }

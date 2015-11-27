@@ -1,14 +1,14 @@
 # Macro file
 
 #verbosity level
-#/run/verbose 1
-#/event/verbose 1
-#/tracking/verbose 1
+/run/verbose 1
+/event/verbose 1
+/tracking/verbose 1
 
 /gun/energy 30 keV
 /gun/polarization 0. 1. 0.
 
-/run/beamOn 100
+/run/beamOn 1
 
 #visualizzazione
 #/control/execute vis.mac

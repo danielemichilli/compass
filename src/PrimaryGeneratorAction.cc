@@ -11,10 +11,12 @@
 #include "G4UnitsTable.hh"
 
 
-PrimaryGeneratorAction::PrimaryGeneratorAction()
+PrimaryGeneratorAction::PrimaryGeneratorAction(G4double hSource)
 {
   G4int n_particle = 1;
   particleGun = new G4ParticleGun(n_particle);
+  
+  heigth_source = hSource;
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* particle = particleTable->FindParticle("gamma");
@@ -33,16 +35,21 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   G4RunManager* runManager = G4RunManager::GetRunManager();
   DetectorConstruction* detector_construction = (DetectorConstruction*) runManager->GetUserDetectorConstruction();
-  G4int    n   = detector_construction->GetSideNb() / 2 - 1;
+  G4int    n   = detector_construction->GetSideNb();
   G4int    h   = detector_construction->GetHeightOfBacc()/2;
   G4double len = detector_construction->GetPixelSize();
-
-  particleGun->SetParticlePosition(G4ThreeVector((2.*G4UniformRand()-1.)*n*len,(2.*G4UniformRand()-1.)*n*len,h));  //illuminazione uniforme
-
-//  particleGun->SetParticlePosition(G4ThreeVector(1.*mm,1.*mm,10.*cm));  //sorgente puntiforme fissa
-
+  G4double lab = detector_construction->GetLabSize();
   G4int evtNb = anEvent->GetEventID();
-
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,-1.));
+  
+  if (n == 1) {
+    particleGun->SetParticlePosition(G4ThreeVector(2.*cm,0.*mm,heigth_source-h));  //sorgente puntiforme fissa
+    particleGun->SetParticleMomentumDirection(G4ThreeVector(-1.,0.,0.));
+  }
+  else {
+    n = n  / 2 - 1;
+    particleGun->SetParticlePosition(G4ThreeVector((2.*G4UniformRand()-1.)*n*len,(2.*G4UniformRand()-1.)*n*len,h));  //illuminazione uniforme
+    particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,-1.));
+  }
+  
   particleGun->GeneratePrimaryVertex(anEvent);
 }

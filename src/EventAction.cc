@@ -33,6 +33,10 @@ void EventAction::BeginOfEventAction(const G4Event* event)
 
 void EventAction::EndOfEventAction(const G4Event* event)
 {
+  
+  G4int evtNb = event -> GetEventID();
+  
+  /*
   static const G4double pC = 1.e-12*coulomb;
   if(PhotonsCollectionIndex<0) return;
 //  if(GammasCollectionIndex<0) return;
@@ -187,6 +191,8 @@ void EventAction::EndOfEventAction(const G4Event* event)
   
 
 //  scorefile_phot.close();
+
+*/
 
   evtNb+=1;
   if(evtNb%100==0) {

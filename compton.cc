@@ -30,14 +30,13 @@ int main(int argc,char** argv)
   input.open("input.in");
   G4double h;
   G4int n;
+  G4double hSource;
   input>>h;
   h*=cm;
   input>>n;
+  input>>hSource;
+  hSource*=cm;  
   input.close();
-
-
-  std::cout << h;
-  std::cout << n;
   
   
   G4RunManager* runManager = new G4RunManager();                                //run manager creation
@@ -48,7 +47,7 @@ int main(int argc,char** argv)
   PhysicsList* physics = new PhysicsList();                                     //physics list creation 
   runManager->SetUserInitialization(physics);                                   //apply to run manager
 
-  PrimaryGeneratorAction* gen_action = new PrimaryGeneratorAction();            //generation action creation
+  PrimaryGeneratorAction* gen_action = new PrimaryGeneratorAction(hSource);     //generation action creation
   runManager->SetUserAction(gen_action);                                        //apply to run manager
 
   EventAction* event_action = new EventAction();
@@ -65,12 +64,12 @@ int main(int argc,char** argv)
   UImanager->ApplyCommand("/control/execute dati.mac");  
 
 //opzioni per la visualizzazione
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-  G4UIExecutive * ui = new G4UIExecutive(argc,argv);
-  ui->SessionStart();
-  delete ui;
-  delete visManager;
+//  G4VisManager* visManager = new G4VisExecutive;
+//  visManager->Initialize();
+//  G4UIExecutive * ui = new G4UIExecutive(argc,argv);
+//  ui->SessionStart();
+//  delete ui;
+//  delete visManager;
 
   delete runManager;
 

@@ -21,10 +21,11 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4String GetEavyMaterial();
     inline G4double GetAnodeSize() {return AnodeSize*2.;}
     inline G4double GetPixelSize() {return PixelSize*2.;}
+    inline G4double GetLabSize() {return LabSize;}
 
   private:
     G4int    SideNb;
-    G4double HeightOfBacc,AnodeSize,PixelSize;
+    G4double HeightOfBacc,AnodeSize,PixelSize,LabSize;
     G4Material *softMaterial,*eavyMaterial;
     
 };
