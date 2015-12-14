@@ -62,8 +62,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()                            
     //dimensions
   G4double    GlassHeight  = 1.5 *mm;   //PMT Glass height
   softMaterial = BC404  ;   //soft scintillator material                        //***** || Elemet to edit ||
-  eavyMaterial = EJ200  ;   //eavy scintillator material                        //***** || Elemet to edit ||  // Also used for single stick
+  eavyMaterial = BC404  ;   //eavy scintillator material                        //***** || Elemet to edit ||  // Also used for single stick
 
+  if (SideNb == 1) softMaterial = eavyMaterial;
+  
   AnodeSize     /= 2.;
   PixelSize     /= 2.;
   GlassHeight   /= 2.;
@@ -82,13 +84,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct()                            
     //scintillators
   G4Box*                baccSol = new G4Box("aBaccSolid",AnodeSize,AnodeSize,HeightOfBacc);
   G4LogicalVolume*      baccLog = new G4LogicalVolume(baccSol,softMaterial,"aBaccLog",0,0,0);
-  
-  if (SideNb == 1) {
-    G4VPhysicalVolume*    baccPhy = new G4PVPlacement(0,G4ThreeVector(0.,0.,-0.1*mm),baccLog,"Bar",scatLog,false,0);
-  } else {
-    BaccParameterisation* baccPar = new BaccParameterisation(SideNb,PixelSize*2.,softMaterial,eavyMaterial);
-    G4VPhysicalVolume*    baccPhy = new G4PVParameterised("bacchette",baccLog,scatLog,kXAxis,SideNb*SideNb,baccPar);
-  }
+  G4VPhysicalVolume*    baccPhy = new G4PVPlacement(0,G4ThreeVector(0.,0.,-0.1*mm),baccLog,"Bar",scatLog,false,0);
+//  if (SideNb == 1) {
+//    baccPhy = new G4PVPlacement(0,G4ThreeVector(0.,0.,-0.1*mm),baccLog,"Bar",scatLog,false,0);
+//  } else {
+//    BaccParameterisation* baccPar = new BaccParameterisation(SideNb,PixelSize*2.,softMaterial,eavyMaterial);
+//    baccPhy = new G4PVParameterised("bacchette",baccLog,scatLog,kXAxis,SideNb*SideNb,baccPar);
+//  }
   
     //PhotoMultiplier Tube
   G4Box*                baseSol = new G4Box("PMT_Sol",PixelSize*SideNb,PixelSize*SideNb,1.0*cm);
@@ -150,9 +152,24 @@ G4VPhysicalVolume* DetectorConstruction::Construct()                            
 
     //VM2000
   G4OpticalSurface* VM2000 = new G4OpticalSurface("VM2000");
-  VM2000->SetType(dielectric_LUT);
-  VM2000->SetModel(LUT);
-  VM2000->SetFinish(polishedvm2000air);
+  new G4LogicalBorderSurface("VM2000",baccPhy,scatPhy,VM2000);
+  VM2000->SetType(dielectric_metal);
+  VM2000->SetModel(unified);
+  VM2000->SetFinish(ground);
+  const G4int VM2000_NUM = 2;
+  G4double VM2000_PP[VM2000_NUM]      = {100*nm,1000.*nm};
+  G4double VM2000_reflect[VM2000_NUM] = {.97,.97};  //coefficiente di riflessione
+  G4double specularspike[VM2000_NUM]  = {.98,.98};  //frazione riflessa specularmente
+  G4double backscatter[VM2000_NUM]    = {0.,0.};
+  G4double specularlobe[VM2000_NUM]   = {0.,0.};
+  G4double VM2000_efficie[VM2000_NUM] = {0.,0.};
+  G4MaterialPropertiesTable* VM2000_border = new G4MaterialPropertiesTable();
+  VM2000_border->AddProperty("REFLECTIVITY",VM2000_PP,VM2000_reflect,VM2000_NUM);
+  VM2000_border->AddProperty("SPECULARSPIKECONSTANT",VM2000_PP,specularspike,VM2000_NUM);
+  VM2000_border->AddProperty("BACKSCATTERCONSTANT",VM2000_PP,backscatter,VM2000_NUM);
+  VM2000_border->AddProperty("SPECULARLOBECONSTANT",VM2000_PP,specularlobe,VM2000_NUM);
+  VM2000_border->AddProperty("EFFICIENCY",VM2000_PP,VM2000_efficie,VM2000_NUM);
+  VM2000->SetMaterialPropertiesTable(VM2000_border);
   
     //Teflon
   G4OpticalSurface* Teflon = new G4OpticalSurface("Teflon");

@@ -1,13 +1,13 @@
-Seed: 2061136544; 435433691
+Seed: 1552409219; 993535200
 
-Energia del fotone (keV)...........30
-Eventi simulati....................1
-Eventi validi nell'assorbitore.....0
+Energia del fotone (keV)...........22
+Eventi simulati....................100000
+Eventi validi nell'assorbitore.....13126
 Eventi validi nello scatteratore...0
-Angolo di polarizzazione reale.....90°
-Tagging efficiency 1...............0
+Angolo di polarizzazione reale.....0°
+Tagging efficiency 1...............0.13126
 Tagging efficiency 2...............0
 
 Numero di bacchette per lato.......1
-Altezza delle bacchette............12 cm
-Altezza della sorgente.............-1e-05 cm
+Altezza delle bacchette............10 cm
+Altezza della sorgente.............1 cm

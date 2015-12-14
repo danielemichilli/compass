@@ -36,12 +36,12 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   std::ofstream scorefile_charge;
   scorefile_charge.open("scorefile_charge.dat");
   scorefile_charge.close();
-  std::ofstream scorefile_theta2;
-  scorefile_theta2.open("scorefile_theta2.dat");
-  scorefile_theta2.close();
-  std::ofstream scorefile_charge2;
-  scorefile_charge2.open("scorefile_charge2.dat");
-  scorefile_charge2.close();
+//  std::ofstream scorefile_theta2;
+//  scorefile_theta2.open("scorefile_theta2.dat");
+//  scorefile_theta2.close();
+//  std::ofstream scorefile_charge2;
+//  scorefile_charge2.open("scorefile_charge2.dat");
+//  scorefile_charge2.close();
 }
 
 void RunAction::EndOfRunAction(const G4Run*)

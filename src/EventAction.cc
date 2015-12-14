@@ -33,10 +33,6 @@ void EventAction::BeginOfEventAction(const G4Event* event)
 
 void EventAction::EndOfEventAction(const G4Event* event)
 {
-  
-  G4int evtNb = event -> GetEventID();
-  
-  /*
   static const G4double pC = 1.e-12*coulomb;
   if(PhotonsCollectionIndex<0) return;
 //  if(GammasCollectionIndex<0) return;
@@ -87,6 +83,11 @@ void EventAction::EndOfEventAction(const G4Event* event)
   } 
 //  scorefile_gamma.close();
 
+  std::ofstream scorefile_theta;
+  scorefile_theta.open("scorefile_theta.dat",std::fstream::app);
+  std::ofstream scorefile_charge;
+  scorefile_charge.open("scorefile_charge.dat",std::fstream::app);
+        
   G4double op_charge[n*n];
   for(int i=0;i<n*n;i++) op_charge[i]=0;
 //  scorefile_phot.open("scorefile_photon.dat",std::fstream::app);
@@ -137,29 +138,24 @@ void EventAction::EndOfEventAction(const G4Event* event)
 
 //  if(not(abs(chambs[0]%n-chambs[1]%n)>2 and abs(chambs[0]/n-chambs[1]/n)>2)) flag=0;      //se le bacchette sono troppo vicine non calcola
 
-
       if(flag==1 and flagEavy==1) {
-        std::ofstream scorefile_theta;
-        scorefile_theta.open("scorefile_theta.dat",std::fstream::app);
-        std::ofstream scorefile_charge;
-        scorefile_charge.open("scorefile_charge.dat",std::fstream::app);
         G4int scat=-1,abs=-1;
         for(int i=0;i<n*n;i++) {
-          if(op_charge[i]>0.) scat=i;
-          else if(chamb_arr[i]<0.) abs=i;
+          if(op_charge[i]>0.) scat = i;
+          else if(chamb_arr[i]<0.) abs = i;
         }
-        if(scat==-1 or abs==-1) {
-          G4cout<<"Errore in Event Action 1"<<G4endl;
-          return;
+        if (n > 1) {
+          if(scat==-1 or abs==-1) {
+            G4cout<<"Errore in Event Action 1"<<G4endl;
+            return;
+          }
+          G4double theta = charge->Theta(scat,abs);
+          scorefile_theta << theta << G4endl;
         }
-        G4double theta = charge->Theta(scat,abs);
-        scorefile_theta << theta << G4endl;
         scorefile_charge << op_charge[scat] << G4endl;
-        num+=1;
-        scorefile_theta.close();
-        scorefile_charge.close();
+        num += 1;
       }
-
+/*
       else if(flag==2) {
         std::ofstream scorefile_theta2;
         scorefile_theta2.open("scorefile_theta2.dat",std::fstream::app);
@@ -185,6 +181,10 @@ void EventAction::EndOfEventAction(const G4Event* event)
         scorefile_theta2.close();
         scorefile_charge2.close();
       }
+*/      
+
+      scorefile_theta.close();
+      scorefile_charge.close();
       delete charge;
     }
   }
@@ -192,7 +192,6 @@ void EventAction::EndOfEventAction(const G4Event* event)
 
 //  scorefile_phot.close();
 
-*/
 
   evtNb+=1;
   if(evtNb%100==0) {
